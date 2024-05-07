@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>FIND/47 スライドショー</title>
+</head>
+<body>
+
+<main id=main>
+</main>
+
+<header>
+	<div id=divinfo></div>
+</header>
+<footer>
+Photo &amp; Design: <a href="https://find47.jp/">FIND/47</a> (CC BY)<br>
+Lib: <a href="https://github.com/code4fukui/yurayura-photo-viewer/">yurayura-photo-viewer</a><br>
+App: <a href="https://github.com/code4fukui/find47-dashboard/">src on GitHub</a> by <a href=https://code4fukui.github.io/>Code for FUKUI</a><br>
+</footer>
+
+<style>
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	font-family: serif;
+}
+header {
+	position: absolute;
+	top: 1em;
+	left: 1em;
+}
+footer {
+	position: absolute;
+	bottom: 1em;
+	left: 1em;
+}
+main {
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+}
+yurayura-photo-viewer {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+a {
+	color: gray !important;
+}
+#divinfo {
+	padding-top: 1em;
+	height: 6em;
+	font-size: 220%;
+}
+#divinfo a {
+	text-decoration: none;
+	color: #222 !important;;
+}
+.fadein {
+  animation-name: fadein;
+  animation-duration: 1s;
+}
+@keyframes fadein {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+.fadeout {
+	animation-name: fadeout;
+  animation-duration: 1s;
+}
+@keyframes fadeout {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+</style>
+
+<script type="module">
+import { YurayuraPhotoViewer } from "https://code4fukui.github.io/yurayura-photo-viewer/yurayura-photo-viewer.js";
+import { CSV } from "https://js.sabae.cc/CSV.js";
+import { shuffle } from "https://js.sabae.cc/shuffle.js";
+
+const allurl = "https://code4fukui.github.io/find47/find47images.csv";
+const prefurl = (n) => "https://code4fukui.github.io/find47/pref/find47images_JP-" + (n < 10 ? "0" + n : n) + ".csv";
+
+const getURL = () => {
+	const no = parseInt(location.hash.substring(1));
+	if (isNaN(no)) return allurl;
+	return prefurl(no);
+};
+
+const url = getURL();
+const data = await CSV.fetchJSON(url);
+shuffle(data);
+const nimages = data.length > 300 ? 300 : data.length;
+const images = [];
+for (let i = 0; i < nimages; i++) {
+	const d = data[i];
+	const img = "https://code4fukui.github.io/find47/photo/" + d.id + ".jpg";
+	const opt = {
+		file: img,
+		width: 960,
+		height: 540,
+		data: d,
+	};
+	images.push(opt);
+}
+const yura = new YurayuraPhotoViewer();
+main.appendChild(yura);
+yura.setAttribute("duration", 6 * 1000);
+yura.onchange = (data) => {
+	//console.log(data);
+	const d = data.data;
+	divinfo.innerHTML = "<a href=" + d.url + ">" + d.title + "<br>by " + d.author + " (" + d.pref + ")</a>";
+	divinfo.className = "fadein";
+	setTimeout(() => {
+		divinfo.className = "fadeout";
+	}, 5000);
+};
+yura.value = images;
+
+document.body.onclick = (e) => {
+	if (e.target.tagName != "CANVAS") return;
+	document.body.requestFullscreen();
+};
+
+</script>
+</body>
+</html>

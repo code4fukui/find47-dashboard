@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>FIND/47 都道府県別ダッシュボード</title>
+</head><body>
+<h1>FIND/47 都道府県別ダッシュボード</h1>
+<main id=main></main>
+<div id=divlist></div>
+
+<footer>
+DATA: <a href=https://github.com/code4fukui/find47/>code4fukui/find47: image CSV data of find47 project</a><br>
+APP: <a href=https://github.com/code4fukui/find47-dashboard/>src on GitHub</a><br>
+</footer>
+
+
+<script type="module">
+import { makeTabularMapJapan } from "https://code4fukui.github.io/company300/makeTabularMapJapan.js";
+import { CSV } from "https://js.sabae.cc/CSV.js";
+import { JAPAN_PREF } from "https://js.sabae.cc/JAPAN_PREF.js";
+
+const url = "https://code4fukui.github.io/find47/find47images_c.csv";
+const data = await CSV.fetchJSON(url);
+console.log(data);
+
+export const setRankByValue = (array) => {
+  array.sort((a, b) => b.value - a.value);
+  let bk = array[0].value;
+  array[0].rank = 1;
+  for (let i = 1; i < array.length; i++) {
+    if (array[i].value == bk) {
+      array[i].rank = array[i - 1].rank;
+    } else {
+      array[i].rank = i + 1;
+    }
+    bk = array[i].value;
+  }
+};
+export const getMinMax = (array, name = "value") => {
+  let max = parseFloat(array[0][name]);
+  let min = max;
+  for (let i = 1; i < array.length; i++) {
+    const v = parseFloat(array[i][name]);
+    if (v < min) min = v;
+    if (v > max) max = v;
+  }
+  return { min, max };
+};
+export const getMaxLength = (array, name = "value") => {
+  let max = array[0][name];
+  for (let i = 1; i < array.length; i++) {
+    const v = array[i][name];
+    if (v > max) max = v;
+  }
+  return max;
+};
+
+const show = async () => {
+  main.innerHTML = "";
+  const data2 = [];
+  for (const d of data) {
+    const o = data2.find(i => i.pref == d.pref);
+    if (!o) {
+      data2.push({
+        pref: d.pref,
+        list: [d],
+        value: 1,
+      });
+    } else {
+      o.list.push(d);
+      o.value++;
+    }
+  }
+  console.log(data2, data2.length)
+  //const max = getMaxLength(data2, "list");
+  const min = 0;
+  const max = getMaxLength(data2);
+  setRankByValue(data2);
+  main.appendChild(await makeTabularMapJapan((c, name) => {
+    const d = data2.find(i => i.pref == name);
+    if (!d) return;
+    c.innerHTML = `<b>${name}</b><br><b>${d.value}枚</b><br>${d.rank}位`;
+
+    const n = (d.value - min) / (max - min);
+    const h = 130;
+    const s = 10;
+    const l = 97 - n * 47;
+    const col = `hsl(${h},${s}%,${l}%)`;
+    //const col = `rgba(200,50,50,${l / 100 * .5})`;
+    c.style.backgroundColor = col;
+    c.style.color = l > 0 ? "black" : "white";
+    c.onclick = () => {
+      const d0 = data2.find(i => i.pref == name);
+      const s = d0.list.reverse().map(i => {
+        const url = "https://find47.jp/ja/i/" + i.code;
+        const img = "https://code4fukui.github.io/find47/photo/" + i.id + ".jpg";
+        return `<div class=imgc><a href=${url} target=detail_find47><img src=${img}><br>${i.title}</a> by ${i.author}<br></div>`;
+      }).join("");
+      //const surl = "https://code4fukui.github.io/yurayura-photo-viewer/#" + (JAPAN_PREF.findIndex(i => i == name) + 1);
+      const surl = "./slideshow.html#" + (JAPAN_PREF.findIndex(i => i == name) + 1);
+      divlist.innerHTML = `<h2><a href=${surl}>${name} スライドショー表示へ</a></h2>` + s;
+    };
+  }));
+};
+show();
+</script>
+
+<style>
+body {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 5em;
+  font-family: sans-serif;
+  --bg-color: hsl(130, 10%, 15%);;
+}
+h1 {
+  background-color: var(--bg-color);
+  color: #fff;
+  font-size: 200%;
+  padding: .5em;
+  margin: 0;
+}
+footer {
+  background-color: var(--bg-color);
+  color: white;
+  font-size: 90%;
+  margin: 0;
+  padding: 1em;
+  x-position: fixed;
+  bottom: 0;
+  x-width: 100vw;
+}
+footer a {
+  color: white !important;
+}
+select {
+  font-size: 130%;
+  padding: .2em;
+  margin: .3em;
+}
+.tabularmap {
+  padding: .5em;
+}
+.tabularmap > div {
+  border: 2px solid black;
+  margin: 2px;
+  text-align: center;
+  padding: .2em .2em;
+}
+#divlist {
+  border: 2px solid black;
+  margin: .5em;
+  padding: .5em;
+  text-align: left;
+  line-height: 1.6;
+}
+#divlist a {
+  color: gray !important;
+}
+.imgc {
+  margin-bottom: 1em;
+}
+.imgc img {
+  width: 100%;
+}
+@media screen and (max-width: 450px) {
+  .tabularmap > div {
+    font-size: 2.7vw;
+  }
+}
+</style>
