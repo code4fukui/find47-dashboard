@@ -112,7 +112,8 @@ for (let i = 0; i < nimages; i++) {
 }
 const yura = new YurayuraPhotoViewer();
 main.appendChild(yura);
-yura.setAttribute("duration", 6 * 1000);
+const duration = 8 * 1000;
+yura.setAttribute("duration", duration);
 yura.onchange = (data) => {
 	//console.log(data);
 	const d = data.data;
@@ -120,7 +121,7 @@ yura.onchange = (data) => {
 	divinfo.className = "fadein";
 	setTimeout(() => {
 		divinfo.className = "fadeout";
-	}, 5000);
+	}, duration - 1000);
 };
 yura.value = images;
 
