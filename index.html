@@ -96,7 +96,11 @@ const show = async () => {
       //const surl = "https://code4fukui.github.io/yurayura-photo-viewer/#" + (JAPAN_PREF.findIndex(i => i == name) + 1);
       const surl = "./slideshow.html#" + (JAPAN_PREF.findIndex(i => i == name) + 1);
       divlist.innerHTML = `<h2><a href=${surl}>${name} スライドショー表示へ</a></h2>` + s;
+      location.hash = name;
     };
+    if (decodeURIComponent(location.hash.substring(1)) == name) {
+      c.onclick();
+    }
   }));
 };
 show();
