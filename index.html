@@ -85,7 +85,7 @@ const show = async () => {
     const col = `hsl(${h},${s}%,${l}%)`;
     //const col = `rgba(200,50,50,${l / 100 * .5})`;
     c.style.backgroundColor = col;
-    c.style.color = l > 0 ? "black" : "white";
+    c.style.color = l > 50 ? "black" : "white";
     c.onclick = () => {
       const d0 = data2.find(i => i.pref == name);
       const s = d0.list.reverse().map(i => {
