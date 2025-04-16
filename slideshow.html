@@ -54,6 +54,9 @@ a {
 	text-decoration: none;
 	color: #222 !important;;
 }
+.no {
+	font-size: 50%;
+}
 .fadein {
   animation-name: fadein;
   animation-duration: 1s;
@@ -84,6 +87,7 @@ a {
 import { YurayuraPhotoViewer } from "https://code4fukui.github.io/yurayura-photo-viewer/yurayura-photo-viewer.js";
 import { CSV } from "https://js.sabae.cc/CSV.js";
 import { shuffle } from "https://js.sabae.cc/shuffle.js";
+import { search } from "https://js.sabae.cc/search.js";
 
 const allurl = "https://code4fukui.github.io/find47/find47images.csv";
 const prefurl = (n) => "https://code4fukui.github.io/find47/pref/find47images_JP-" + (n < 10 ? "0" + n : n) + ".csv";
@@ -95,7 +99,12 @@ const getURL = () => {
 };
 
 const url = getURL();
-const data = await CSV.fetchJSON(url);
+const data0 = await CSV.fetchJSON(url);
+
+const query = new URL(location.href).searchParams.get("q");
+console.log({ query }, data0);
+const data = !query ? data0 : search(data0, query);
+
 shuffle(data);
 const nimages = data.length > 300 ? 300 : data.length;
 const images = [];
@@ -117,7 +126,7 @@ yura.setAttribute("duration", duration);
 yura.onchange = (data) => {
 	//console.log(data);
 	const d = data.data;
-	divinfo.innerHTML = "<a href=" + d.url + ">" + d.title + "<br>by " + d.author + " (" + d.pref + ")</a>";
+	divinfo.innerHTML = "<a href=" + d.url + ">" + d.title + "<br>by " + d.author + " (" + d.pref + ")<br><span class=no>No. " + d.id + "</span></a>";
 	divinfo.className = "fadein";
 	setTimeout(() => {
 		divinfo.className = "fadeout";

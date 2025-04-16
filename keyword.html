@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>FIND/47 スライドショー with キーワード</title>
+</head>
+<body>
+<h1>FIND/47 スライドショー with キーワード</h1>
+
+<input type=text id=inkey value="桜" placeholder="検索キーワード"><button id=btnopen>open</button>
+
+<footer>
+Photo &amp; Design: <a href="https://find47.jp/">FIND/47</a> (CC BY)<br>
+App: <a href="https://github.com/code4fukui/find47-dashboard/">src on GitHub</a> by <a href=https://code4fukui.github.io/>Code for FUKUI</a><br>
+</footer>
+
+<style>
+body {
+	font-family: serif;
+	text-align: center;
+	margin-top: 5em;
+}
+footer {
+	margin-top: 2em;
+}
+input {
+	width: 50vw;
+	font-size: 130%;
+}
+button {
+	font-size: 130%;
+}
+a {
+	color: gray !important;
+}
+</style>
+
+<script type="module">
+btnopen.onclick = () => {
+	const key = inkey.value;
+	if (!key) {
+		alert("検索キーワードを入力してください");
+		return;
+	}
+	const url = "./slideshow.html?q=" + encodeURIComponent(key);
+	open(url, "_blank");
+};
+</script>
+</body>
+</html>
