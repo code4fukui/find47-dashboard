@@ -1,5 +1,7 @@
 # find47-dashboard
 
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
 A dashboard and slideshow viewer for the FIND/47 project, which showcases photography of various locations across Japan.
 
 ## Demo
