@@ -17,4 +17,4 @@ A dashboard and slideshow viewer for the FIND/47 project, which showcases photog
 The project uses image data from the [find47 project](https://find47.jp/).
 
 ## License
-This project is licensed under the MIT License.
+MIT License — see [LICENSE](LICENSE).
