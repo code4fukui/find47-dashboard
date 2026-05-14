@@ -7,7 +7,7 @@ A web-based dashboard that visualizes the beautiful photography of the [FIND/47]
 ## Demo
 
 - **[Dashboard](https://code4fukui.github.io/find47-dashboard/)**: An interactive map of Japan showing photo distribution.
-- **[Keyword Search](https://code4fukui.github.io/find47-dashboard/keywoard.html)**: A tool to launch a slideshow based on a search term.
+- **[Keyword Search](https://github.com/code4fukui/find47-dashboard)**: A tool to launch a slideshow based on a search term.
 
 ## Features
 
@@ -21,7 +21,7 @@ A web-based dashboard that visualizes the beautiful photography of the [FIND/47]
 1.  **Explore the Map**: Open the [Dashboard](https://code4fukui.github.io/find47-dashboard/). The map of Japan shows the distribution of photos by prefecture.
 2.  **Select a Prefecture**: Click on a prefecture to view its statistics and load a gallery of its photos at the bottom of the page.
 3.  **Launch the Slideshow**: Above the gallery, click the link (e.g., "北海道 スライドショー表示へ") to open the full-screen animated slideshow for that prefecture.
-4.  **Search by Keyword**: Visit the [Keyword Search](https://code4fukui.github.io/find47-dashboard/keywoard.html) page, enter a term, and click "open" to see a slideshow of matching photos from the entire collection.
+4.  **Search by Keyword**: Visit the [Keyword Search](https://github.com/code4fukui/find47-dashboard) page, enter a term, and click "open" to see a slideshow of matching photos from the entire collection.
 
 ## Data and Technology
 
